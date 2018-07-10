@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <!-- Start up apriltags. -->
+  <node pkg="apriltags2_ros" type="apriltags2_ros_continuous_node" name="apriltags2_forward" output="screen">
+    <param name="camera_frame"                 value="forward_camera_optical" />
+    <param name="publish_tf"                   value="true" />   
+    <param name="publish_tag_detections_image" value="true" />  
+    <rosparam command="load" file="$(find face_the_tag)/config/apriltags.yaml" />
+    <remap from="image_rect"           to="/forward_camera/image_rect" />
+    <remap from="camera_info"          to="/forward_camera/camera_info" />
+    <remap from="tag_detections_image" to="/forward_camera/tag_detections_image"/>
+  </node>
+
+  <!-- Start up tag tracking. -->
+  <node pkg="face_the_tag" type="face_the_tag.py" name="face_the_tag" output="screen">
+    <param name="ang_vel"   value="0.3"/>
+    <param name="target_id" value="20"/>
+    <param name="timeout"   value="1"/>
+  </node>
+
+</launch>
